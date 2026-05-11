@@ -52,10 +52,18 @@
             background-color: var(--b-dark);
             color: var(--b-light);
             -webkit-font-smoothing: antialiased;
-            overflow: hidden;
-            overscroll-behavior: none;
+            overflow: hidden; /* Prohíbe totalmente el scroll */
+            overscroll-behavior: none; /* Evita el rebote en pantallas táctiles */
+            
+            /* Bloqueo total de selección y copia de texto */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Estándar */
+            cursor: default; /* Fuerza el cursor de flecha estándar en lugar del de texto */
         }
 
+        /* Ocultar barra de desplazamiento visualmente pero permitiendo el scroll en modales */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
