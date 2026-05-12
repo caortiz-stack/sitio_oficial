@@ -116,21 +116,22 @@
         @media (max-width: 767px) {
             .mobile-slide {
                 opacity: 0.35;
-                transform: scale(0.85);
-                filter: grayscale(60%) sepia(30%);
-                transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                transform: scale(0.85) translateZ(0); /* Aceleración GPU */
+                filter: grayscale(50%) sepia(20%);
+                transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease, filter 0.4s ease;
+                will-change: transform, opacity, filter; /* Optimización de fluidez */
             }
             .mobile-slide.is-active {
                 opacity: 1;
-                transform: scale(1);
+                transform: scale(1) translateZ(0);
                 filter: grayscale(0%) sepia(0%);
                 z-index: 20;
             }
             
             /* Animaciones controladas por el estado "Activo" en móvil */
             .mobile-slide.is-active .cover-img {
-                filter: sepia(0) brightness(0.9) saturate(1) !important;
-                transform: scale(1.03) !important;
+                filter: sepia(0) brightness(0.95) saturate(1) !important;
+                transform: scale(1.02) !important;
             }
             .mobile-slide.is-active .cover-gradient { opacity: 0.5 !important; }
             
@@ -204,17 +205,25 @@
         <div class="nt">Catálogo Musical</div>
         <div class="bc">
             <div><span class="ip">Christian</span><span class="bp">Ortiz</span></div>
-            <!-- Mini instrucción exclusiva para móvil -->
-            <div class="md:hidden text-[0.4rem] font-mono text-[#e8dbce]/60 normal-case font-normal leading-none mt-[4px]" style="letter-spacing: 0.15em; text-shadow: none;">desliza &rarr; reciente a antiguo</div>
         </div>
         <div class="sc"><a href="https://www.twitch.tv/imeachsd" id="tlb" class="tb hidden" target="_blank"><div class="ld"></div><span>En Vivo</span></a><a href="https://open.spotify.com/artist/2MU9ePZ5SINnOTG2DrI0OE" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a><a href="https://music.apple.com/us/artist/christian-ortiz/1498747143" target="_blank" title="Apple Music"><i class="fab fa-apple"></i></a><a href="https://youtube.com/@chortiz_official" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a><a href="https://caortiz-stack.github.io/portafolio/" target="_blank" title="Behance"><i class="fab fa-behance"></i></a></div>
     </header>
 
     <!-- Contenido Principal -->
-    <main id="main-content" class="fixed top-[10vh] left-0 w-screen h-[90vh] transition-all duration-700 ease-out flex items-center justify-center py-4 px-0 md:px-12 md:py-8 box-border z-10">
+    <main id="main-content" class="fixed top-[10vh] left-0 w-screen h-[90vh] transition-all duration-700 ease-out flex flex-col items-center justify-center py-0 md:px-12 md:py-8 box-border z-10">
         
-        <!-- CONTENEDOR HÍBRIDO -->
-        <div class="flex flex-row overflow-x-auto snap-x snap-mandatory no-scrollbar items-center gap-6 px-[12vw] w-full h-full max-w-[1400px] md:grid md:grid-cols-3 md:grid-rows-2 md:gap-x-12 md:gap-y-6 md:px-0 md:items-stretch md:overflow-visible md:snap-none" id="catalog-grid">
+        <!-- Instrucción exclusiva para móvil (arriba de las carátulas) -->
+        <div class="md:hidden w-full text-center flex-shrink-0 mt-8 mb-4 opacity-70 fade-in" style="animation-delay: 0.8s;">
+            <p class="font-mono text-[0.55rem] text-[#e8dbce]/60 tracking-[0.2em] uppercase flex items-center justify-center gap-2">
+                <i class="fas fa-chevron-left text-[0.4rem] opacity-50"></i>
+                Desliza
+                <i class="fas fa-chevron-right text-[0.4rem] opacity-50"></i>
+            </p>
+            <p class="font-mono text-[0.35rem] text-[#e8dbce]/40 tracking-[0.1em] uppercase mt-1.5">Reciente &rarr; Antiguo</p>
+        </div>
+
+        <!-- CONTENEDOR HÍBRIDO (Grid en PC / Slider Flex en Móvil) -->
+        <div class="flex flex-row overflow-x-auto snap-x snap-mandatory no-scrollbar items-center gap-6 px-[15vw] w-full flex-grow md:h-full max-w-[1400px] md:grid md:grid-cols-3 md:grid-rows-2 md:gap-x-12 md:gap-y-6 md:px-0 md:items-stretch md:overflow-visible md:snap-none" id="catalog-grid">
             <!-- Los items se inyectan vía JS -->
         </div>
     </main>
@@ -417,7 +426,7 @@
                     });
                 }, {
                     root: document.getElementById('catalog-grid'),
-                    threshold: 0.6
+                    threshold: 0.55
                 });
 
                 document.querySelectorAll('.mobile-slide').forEach(slide => observer.observe(slide));
@@ -426,7 +435,7 @@
             renderGridSkeletons() {
                 const grid = document.getElementById('catalog-grid');
                 grid.innerHTML = catalogData.map((album, index) => `
-                    <article class="mobile-slide flex flex-col items-center justify-center w-[76vw] h-auto flex-shrink-0 snap-center md:w-full md:h-full md:min-h-0 md:min-w-0 md:flex-shrink md:snap-none fade-in group" style="animation-delay: ${index * 0.2}s;" id="card-${album.id}">
+                    <article class="mobile-slide flex flex-col items-center justify-center w-[70vw] h-auto flex-shrink-0 snap-center md:w-full md:h-full md:min-h-0 md:min-w-0 md:flex-shrink md:snap-none fade-in group" style="animation-delay: ${index * 0.15}s;" id="card-${album.id}">
                         
                         <!-- Wrapper Interior -->
                         <div id="hover-target-${album.id}" class="card-hover w-full flex flex-col items-center justify-center md:w-fit md:h-full">
