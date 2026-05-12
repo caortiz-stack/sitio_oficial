@@ -196,7 +196,21 @@
     <div class="film-grain"></div>
 
     <!-- Navegación Original Restaurada Exacta -->
-    <header class="lt"><div class="nt">Catálogo Musical</div><div class="bc"><span class="ip">Christian</span><span class="bp">Ortiz</span></div><div class="sc"><a href="https://www.twitch.tv/imeachsd" id="tlb" class="tb hidden" target="_blank"><div class="ld"></div><span>En Vivo</span></a><a href="https://open.spotify.com/artist/2MU9ePZ5SINnOTG2DrI0OE" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a><a href="https://music.apple.com/us/artist/christian-ortiz/1498747143" target="_blank" title="Apple Music"><i class="fab fa-apple"></i></a><a href="https://youtube.com/@chortiz_official" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a><a href="https://caortiz-stack.github.io/portafolio/" target="_blank" title="Behance"><i class="fab fa-behance"></i></a></div></header>
+    <header class="lt">
+        <div class="nt">Catálogo Musical</div>
+        <div class="bc">
+            <div><span class="ip">Christian</span><span class="bp">Ortiz</span></div>
+            <!-- Mini instrucción exclusiva para móvil -->
+            <div class="md:hidden text-[0.4rem] font-mono text-[#e8dbce]/60 normal-case font-normal leading-none mt-[4px]" style="letter-spacing: 0.15em; text-shadow: none;">desliza &rarr; reciente a antiguo</div>
+        </div>
+        <div class="sc">
+            <a href="https://www.twitch.tv/imeachsd" id="tlb" class="tb hidden" target="_blank"><div class="ld"></div><span>En Vivo</span></a>
+            <a href="https://open.spotify.com/artist/2MU9ePZ5SINnOTG2DrI0OE" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a>
+            <a href="https://music.apple.com/us/artist/christian-ortiz/1498747143" target="_blank" title="Apple Music"><i class="fab fa-apple"></i></a>
+            <a href="https://youtube.com/@chortiz_official" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://caortiz-stack.github.io/portafolio/" target="_blank" title="Behance"><i class="fab fa-behance"></i></a>
+        </div>
+    </header>
 
     <!-- Contenido Principal -->
     <main id="main-content" class="fixed top-[10vh] left-0 w-screen h-[90vh] transition-all duration-700 ease-out flex items-center justify-center py-4 px-0 md:px-12 md:py-8 box-border z-10">
@@ -421,8 +435,9 @@
                         <div id="hover-target-${album.id}" class="card-hover group flex flex-col items-center justify-center w-full md:w-fit md:h-full">
                             
                             <!-- Contenedor Portada + Redes Absolutas -->
-                            <div class="flex-1 w-full min-h-0 flex items-center justify-center relative">
-                                <div class="relative h-full aspect-square transition-all duration-700">
+                            <!-- CORRECCIÓN MÓVIL: w-full flex-shrink-0 forza a la carátula a mantener su espacio físico y no aplastar los textos -->
+                            <div class="w-full flex-shrink-0 flex items-center justify-center relative md:flex-1 md:min-h-0">
+                                <div class="relative w-full aspect-square transition-all duration-700 md:w-auto md:h-full md:aspect-square">
                                     
                                     <!-- Contenedor Portada (Corte exacto) -->
                                     <div class="absolute inset-0 bg-black overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.9)] ring-1 ring-white/5 group-hover:ring-brand-accent/30 group-hover:shadow-[0_25px_50px_rgba(217,112,20,0.15)] rounded-sm">
