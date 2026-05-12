@@ -52,18 +52,16 @@
             background-color: var(--b-dark);
             color: var(--b-light);
             -webkit-font-smoothing: antialiased;
-            overflow: hidden; /* Prohíbe totalmente el scroll */
-            overscroll-behavior: none; /* Evita el rebote en pantallas táctiles */
+            overflow: hidden; 
+            overscroll-behavior: none; 
             
-            /* Bloqueo total de selección y copia de texto */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Estándar */
-            cursor: default; /* Fuerza el cursor de flecha estándar en lugar del de texto */
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none; 
+            cursor: default; 
         }
 
-        /* Ocultar barra de desplazamiento visualmente pero permitiendo el scroll en modales y en el slider móvil */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -103,8 +101,6 @@
             .card-hover {
                 transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             }
-            /* La magia del :has() -> Solo opaca las demás si hay una tarjeta ESPECÍFICAMENTE siendo apuntada. 
-               Pasar el ratón por un hueco vacío de la cuadrícula no hará nada. */
             #catalog-grid:has(.card-hover:hover) .card-hover:not(:hover) {
                 opacity: 0.2;
                 filter: blur(2px) grayscale(60%) sepia(50%);
@@ -130,23 +126,31 @@
                 filter: grayscale(0%) sepia(0%);
                 z-index: 20;
             }
-            /* Forzar el Hover cuando la tarjeta se centra en el celular */
-            .mobile-slide.is-active img {
+            
+            /* Animaciones controladas por el estado "Activo" en móvil */
+            .mobile-slide.is-active .cover-img {
                 filter: sepia(0) brightness(0.9) saturate(1) !important;
                 transform: scale(1.03) !important;
             }
-            .mobile-slide.is-active .group-hover\:opacity-50 { opacity: 0.5 !important; }
-            .mobile-slide.is-active .group-hover\:opacity-100 { opacity: 1 !important; }
-            .mobile-slide.is-active .group-hover\:translate-y-0 { transform: translateY(0) !important; }
-            .mobile-slide.is-active .group-hover\:text-white { color: #ffffff !important; }
-            .mobile-slide.is-active .group-hover\:text-brand-accent { color: var(--b-accent) !important; }
-            .mobile-slide.is-active .group-hover\:shadow-\[0_25px_50px_rgba\(217\,112\,20\,0\.15\)\] {
-                box-shadow: 0 25px 50px rgba(217, 112, 20, 0.15) !important;
+            .mobile-slide.is-active .cover-gradient { opacity: 0.5 !important; }
+            
+            .mobile-slide.is-active .cover-actions {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+                pointer-events: auto !important;
             }
-            .mobile-slide.is-active .group-hover\:ring-brand-accent\/30 {
+            .mobile-slide.is-active .cover-wrapper {
+                box-shadow: 0 25px 50px rgba(217, 112, 20, 0.15) !important;
                 --tw-ring-color: rgba(217, 112, 20, 0.3) !important;
                 box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
             }
+            .mobile-slide.is-active .mobile-socials {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+                pointer-events: auto !important;
+            }
+            .mobile-slide.is-active .album-title { color: #ffffff !important; }
+            .mobile-slide.is-active .album-meta { color: rgba(217, 112, 20, 0.8) !important; }
         }
 
         .fade-in {
@@ -203,13 +207,7 @@
             <!-- Mini instrucción exclusiva para móvil -->
             <div class="md:hidden text-[0.4rem] font-mono text-[#e8dbce]/60 normal-case font-normal leading-none mt-[4px]" style="letter-spacing: 0.15em; text-shadow: none;">desliza &rarr; reciente a antiguo</div>
         </div>
-        <div class="sc">
-            <a href="https://www.twitch.tv/imeachsd" id="tlb" class="tb hidden" target="_blank"><div class="ld"></div><span>En Vivo</span></a>
-            <a href="https://open.spotify.com/artist/2MU9ePZ5SINnOTG2DrI0OE" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a>
-            <a href="https://music.apple.com/us/artist/christian-ortiz/1498747143" target="_blank" title="Apple Music"><i class="fab fa-apple"></i></a>
-            <a href="https://youtube.com/@chortiz_official" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="https://caortiz-stack.github.io/portafolio/" target="_blank" title="Behance"><i class="fab fa-behance"></i></a>
-        </div>
+        <div class="sc"><a href="https://www.twitch.tv/imeachsd" id="tlb" class="tb hidden" target="_blank"><div class="ld"></div><span>En Vivo</span></a><a href="https://open.spotify.com/artist/2MU9ePZ5SINnOTG2DrI0OE" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a><a href="https://music.apple.com/us/artist/christian-ortiz/1498747143" target="_blank" title="Apple Music"><i class="fab fa-apple"></i></a><a href="https://youtube.com/@chortiz_official" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a><a href="https://caortiz-stack.github.io/portafolio/" target="_blank" title="Behance"><i class="fab fa-behance"></i></a></div>
     </header>
 
     <!-- Contenido Principal -->
@@ -291,7 +289,7 @@
         ];
 
         const App = {
-            audioElements: [new Audio(), new Audio()], // Sistema Dual-Audio para el Crossfade
+            audioElements: [new Audio(), new Audio()],
             itunesData: {},
             state: { currentAlbumId: null, currentTrackIndex: -1, isPlaying: false, fadeFrames: [null, null], animationFrameId: null, isFadingOut: false, activeAudioIndex: 0 },
 
@@ -344,7 +342,6 @@
                     document.getElementById('time-current').innerText = this.formatTime(audio.currentTime);
                     
                     const timeLeft = audio.duration - audio.currentTime;
-                    // Auto-Fade Out para el final natural de la canción
                     if (timeLeft <= 2.5 && timeLeft > 0 && !this.state.isFadingOut && this.state.isPlaying) {
                         this.state.isFadingOut = true;
                         this.fadeAudio(audio, 'out', null, false);
@@ -420,7 +417,7 @@
                     });
                 }, {
                     root: document.getElementById('catalog-grid'),
-                    threshold: 0.6 // Se activa cuando el 60% de la tarjeta está visible en el centro
+                    threshold: 0.6
                 });
 
                 document.querySelectorAll('.mobile-slide').forEach(slide => observer.observe(slide));
@@ -429,47 +426,51 @@
             renderGridSkeletons() {
                 const grid = document.getElementById('catalog-grid');
                 grid.innerHTML = catalogData.map((album, index) => `
-                    <article class="mobile-slide flex flex-col items-center justify-center w-[76vw] h-auto flex-shrink-0 snap-center md:w-full md:h-full md:min-h-0 md:min-w-0 md:flex-shrink md:snap-none fade-in" style="animation-delay: ${index * 0.2}s;" id="card-${album.id}">
+                    <article class="mobile-slide flex flex-col items-center justify-center w-[76vw] h-auto flex-shrink-0 snap-center md:w-full md:h-full md:min-h-0 md:min-w-0 md:flex-shrink md:snap-none fade-in group" style="animation-delay: ${index * 0.2}s;" id="card-${album.id}">
                         
-                        <!-- ESTE WRAPPER DEFINE EL HITBOX EXACTO (w-fit en PC, w-full en Móvil) -->
-                        <div id="hover-target-${album.id}" class="card-hover group flex flex-col items-center justify-center w-full md:w-fit md:h-full">
+                        <!-- Wrapper Interior -->
+                        <div id="hover-target-${album.id}" class="card-hover w-full flex flex-col items-center justify-center md:w-fit md:h-full">
                             
-                            <!-- Contenedor Portada + Redes Absolutas -->
-                            <!-- CORRECCIÓN MÓVIL: w-full flex-shrink-0 forza a la carátula a mantener su espacio físico y no aplastar los textos -->
+                            <!-- Contenedor Portada + Redes Absolutas (Desktop) -->
                             <div class="w-full flex-shrink-0 flex items-center justify-center relative md:flex-1 md:min-h-0">
                                 <div class="relative w-full aspect-square transition-all duration-700 md:w-auto md:h-full md:aspect-square">
                                     
-                                    <!-- Contenedor Portada (Corte exacto) -->
-                                    <div class="absolute inset-0 bg-black overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.9)] ring-1 ring-white/5 group-hover:ring-brand-accent/30 group-hover:shadow-[0_25px_50px_rgba(217,112,20,0.15)] rounded-sm">
-                                        <img id="img-${album.id}" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwZDBhMDgiLz48L3N2Zz4=" alt="${album.title}" class="absolute inset-0 w-full h-full object-cover filter sepia-[0.4] brightness-[0.5] contrast-125 saturate-[0.8] transition-all duration-1000 opacity-0 group-hover:sepia-0 group-hover:brightness-90 group-hover:saturate-100 group-hover:scale-[1.03]">
+                                    <div class="cover-wrapper absolute inset-0 bg-black overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.6)] ring-1 ring-white/5 md:group-hover:ring-brand-accent/30 md:group-hover:shadow-[0_25px_50px_rgba(217,112,20,0.15)] rounded-2xl md:rounded-sm transition-all duration-500">
+                                        <img id="img-${album.id}" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwZDBhMDgiLz48L3N2Zz4=" alt="${album.title}" class="cover-img absolute inset-0 w-full h-full object-cover filter sepia-[0.4] brightness-[0.5] contrast-125 saturate-[0.8] transition-all duration-1000 md:group-hover:sepia-0 md:group-hover:brightness-90 md:group-hover:saturate-100 md:group-hover:scale-[1.03]">
                                         
-                                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.6)_120%)] pointer-events-none transition-opacity duration-1000 group-hover:opacity-50"></div>
+                                        <div class="cover-gradient absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.6)_120%)] pointer-events-none transition-opacity duration-1000 opacity-0 md:group-hover:opacity-50"></div>
 
-                                        <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 md:gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-20">
-                                            <button onclick="App.playAlbumMain('${album.id}')" class="w-10 h-10 md:w-16 md:h-16 border-[1px] border-white/30 rounded-full flex items-center justify-center text-white bg-black/40 backdrop-blur-md hover:border-brand-accent hover:bg-brand-accent hover:text-brand-dark transition-all duration-500 hidden transform translate-y-4 group-hover:translate-y-0 shadow-lg" id="btn-play-${album.id}">
-                                                <i class="fas fa-play ml-1 text-sm md:text-xl"></i>
+                                        <div class="cover-actions absolute inset-0 flex flex-col items-center justify-center gap-3 md:gap-4 opacity-0 pointer-events-none translate-y-4 md:group-hover:opacity-100 md:group-hover:pointer-events-auto md:group-hover:translate-y-0 transition-all duration-500 z-20">
+                                            <button onclick="App.playAlbumMain('${album.id}')" class="hidden w-14 h-14 md:w-16 md:h-16 border-[1px] border-white/30 rounded-full flex items-center justify-center text-white bg-black/40 backdrop-blur-md hover:border-brand-accent hover:bg-brand-accent hover:text-brand-dark transition-all duration-500 shadow-lg" id="btn-play-${album.id}">
+                                                <i class="fas fa-play ml-1 text-lg md:text-xl"></i>
                                             </button>
-                                            <button onclick="App.openModal('${album.id}')" class="px-3 py-1.5 md:px-5 md:py-2.5 border-[1px] border-white/30 rounded-full text-white bg-black/40 backdrop-blur-md font-mono text-[0.45rem] md:text-[0.55rem] tracking-[0.2em] uppercase hover:border-brand-accent hover:bg-brand-accent hover:text-brand-dark transition-all duration-500 hidden transform translate-y-4 group-hover:translate-y-0 shadow-lg" id="btn-list-${album.id}">
+                                            <button onclick="App.openModal('${album.id}')" class="hidden px-5 py-2.5 border-[1px] border-white/30 rounded-full text-white bg-black/40 backdrop-blur-md font-mono text-[0.55rem] md:text-[0.55rem] tracking-[0.2em] uppercase hover:border-brand-accent hover:bg-brand-accent hover:text-brand-dark transition-all duration-500 shadow-lg" id="btn-list-${album.id}">
                                                 <i class="fas fa-list mr-1.5 opacity-80"></i> TRACKLIST
                                             </button>
                                         </div>
                                     </div>
 
-                                    <!-- Redes Laterales Blancas -->
-                                    <div class="absolute -right-8 md:-right-[3.25rem] top-1/2 -translate-y-1/2 flex flex-col gap-2 md:gap-3 flex-shrink-0 z-30 opacity-80 group-hover:opacity-100 transition-opacity">
-                                        ${album.links.spotify !== undefined ? `<a href="${album.links.spotify || '#'}" target="_blank" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-white/40 text-white flex items-center justify-center text-[0.55rem] md:text-xs hover:bg-white hover:text-black hover:border-white transition-all"><i class="fab fa-spotify"></i></a>` : ''}
-                                        ${album.links.apple !== undefined ? `<a href="${album.links.apple || '#'}" target="_blank" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-white/40 text-white flex items-center justify-center text-[0.55rem] md:text-xs hover:bg-white hover:text-black hover:border-white transition-all"><i class="fab fa-apple"></i></a>` : ''}
-                                        ${album.links.youtube !== undefined ? `<a href="${album.links.youtube || '#'}" target="_blank" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-white/40 text-white flex items-center justify-center text-[0.55rem] md:text-xs hover:bg-white hover:text-black hover:border-white transition-all"><i class="fab fa-youtube"></i></a>` : ''}
+                                    <!-- Redes Desktop (Ocultas en móvil) -->
+                                    <div class="hidden md:flex absolute -right-[3.25rem] top-1/2 -translate-y-1/2 flex-col gap-3 flex-shrink-0 z-30 opacity-80 group-hover:opacity-100 transition-opacity">
+                                        ${album.links.spotify !== undefined ? `<a href="${album.links.spotify || '#'}" target="_blank" class="w-8 h-8 rounded-full border border-white/40 text-white flex items-center justify-center text-xs hover:bg-white hover:text-black hover:border-white transition-all"><i class="fab fa-spotify"></i></a>` : ''}
+                                        ${album.links.apple !== undefined ? `<a href="${album.links.apple || '#'}" target="_blank" class="w-8 h-8 rounded-full border border-white/40 text-white flex items-center justify-center text-xs hover:bg-white hover:text-black hover:border-white transition-all"><i class="fab fa-apple"></i></a>` : ''}
+                                        ${album.links.youtube !== undefined ? `<a href="${album.links.youtube || '#'}" target="_blank" class="w-8 h-8 rounded-full border border-white/40 text-white flex items-center justify-center text-xs hover:bg-white hover:text-black hover:border-white transition-all"><i class="fab fa-youtube"></i></a>` : ''}
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- Info Abajo -->
-                            <div class="w-full flex-shrink-0 flex flex-col items-center text-center mt-2 md:mt-4 px-1">
-                                <h3 class="font-serif italic text-sm md:text-lg lg:text-xl text-brand-light/90 truncate w-full group-hover:text-white transition-colors">${album.title}</h3>
-                                <p class="font-mono text-[0.45rem] md:text-[0.55rem] text-brand-light/40 tracking-[0.1em] md:tracking-[0.3em] mt-1 group-hover:text-brand-accent/80 transition-colors">${album.year} <span class="mx-1 md:mx-2">|</span> ${album.type}</p>
+                            <div class="w-full flex-shrink-0 flex flex-col items-center text-center mt-5 md:mt-4 px-2">
+                                <h3 class="album-title font-serif italic text-[1.2rem] leading-tight md:text-lg lg:text-xl text-brand-light/70 truncate w-full md:group-hover:text-white transition-colors duration-500">${album.title}</h3>
+                                <p class="album-meta font-mono text-[0.55rem] md:text-[0.55rem] text-brand-light/30 tracking-[0.2em] md:tracking-[0.3em] mt-1.5 md:group-hover:text-brand-accent/80 transition-colors duration-500">${album.year} <span class="mx-2">|</span> ${album.type}</p>
+                                
+                                <!-- Redes Móvil Exclusivas (Ocultas en Desktop) -->
+                                <div class="mobile-socials flex md:hidden gap-5 mt-4 text-brand-light/40 justify-center w-full opacity-0 pointer-events-none translate-y-2 transition-all duration-700">
+                                    ${album.links.spotify !== undefined ? `<a href="${album.links.spotify || '#'}" target="_blank" class="w-10 h-10 rounded-full border border-white/20 text-white flex items-center justify-center text-[0.8rem]"><i class="fab fa-spotify"></i></a>` : ''}
+                                    ${album.links.apple !== undefined ? `<a href="${album.links.apple || '#'}" target="_blank" class="w-10 h-10 rounded-full border border-white/20 text-white flex items-center justify-center text-[0.8rem]"><i class="fab fa-apple"></i></a>` : ''}
+                                    ${album.links.youtube !== undefined ? `<a href="${album.links.youtube || '#'}" target="_blank" class="w-10 h-10 rounded-full border border-white/20 text-white flex items-center justify-center text-[0.8rem]"><i class="fab fa-youtube"></i></a>` : ''}
+                                </div>
                             </div>
-                            
                         </div>
                     </article>
                 `).join('');
@@ -525,10 +526,15 @@
 
                         const validTracks = matchedData.tracks.filter(t => t.preview);
                         
-                        if (validTracks.length > 0) btnPlay.classList.remove('hidden');
-                        if (matchedData.tracks.length > 1) btnList.classList.remove('hidden');
+                        if (validTracks.length > 0) {
+                            btnPlay.classList.remove('hidden');
+                            btnPlay.classList.add('flex'); // Cambiamos para que flex actúe con opacity
+                        }
+                        if (matchedData.tracks.length > 1) {
+                            btnList.classList.remove('hidden');
+                            btnList.classList.add('flex');
+                        }
 
-                        // Lógica del hover de fondo dinámico atada AL WRAPPER EXACTO DE LA PORTADA
                         const hoverEl = document.getElementById(`hover-target-${localAlbum.id}`);
                         
                         hoverEl.addEventListener('mouseenter', () => {
@@ -699,10 +705,10 @@
                     const btnIcon = document.querySelector(`#btn-play-${album.id} i`);
                     if (!btnIcon) return;
                     if (this.state.currentAlbumId === album.id && this.state.isPlaying) {
-                        btnIcon.className = 'fas fa-pause text-sm md:text-xl text-brand-accent';
+                        btnIcon.className = 'fas fa-pause text-lg md:text-xl text-brand-accent';
                         btnIcon.parentElement.classList.add('border-brand-accent');
                     } else {
-                        btnIcon.className = 'fas fa-play ml-1 text-sm md:text-xl';
+                        btnIcon.className = 'fas fa-play ml-1 text-lg md:text-xl';
                         btnIcon.parentElement.classList.remove('border-brand-accent');
                     }
                 });
